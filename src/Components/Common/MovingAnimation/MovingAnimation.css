@@ -1,0 +1,15 @@
+.animation{
+    top: -5rem;
+    right: 17rem;
+    animation-name: slideLeft;
+    transition: all 2s ease-out;
+    animation-duration: 2s;
+}
+
+@keyframes slideLeft {
+    from{
+        transform: translateX(600px);
+    }to {
+        transform: translateX(0);
+    }
+}
