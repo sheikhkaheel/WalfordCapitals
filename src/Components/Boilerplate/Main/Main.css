@@ -1,0 +1,24 @@
+.content {
+    font-family: "Prompt", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+}
+
+.slideright  {
+    animation-name: slideRight;
+    animation-duration: 2s;
+    transition: all 2s ease;
+    animation-fill-mode: both;
+}
+
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-600px);
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

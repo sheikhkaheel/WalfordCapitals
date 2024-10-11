@@ -1,0 +1,8 @@
+html,
+body,
+.wrapper {
+    background: rgb(24,27,78);
+background: linear-gradient(90deg, rgba(24,27,78,1) 17%, rgba(11,3,49,1) 40%, rgba(0,0,0,1) 63%);
+    height: 100%;
+    width: 100%;
+}
