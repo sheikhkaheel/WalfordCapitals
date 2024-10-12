@@ -5,7 +5,7 @@ export default function Nav(){
     return (
         <>
         <nav>
-            <div className="header slideDown py-8 px-10 flex justify-between text-white">
+            <div className="header slideDown py-8 px-10 flex justify-between text-zinc-300">
                 <h2 className="text-xl">
                     Walford Capitals
                 </h2>

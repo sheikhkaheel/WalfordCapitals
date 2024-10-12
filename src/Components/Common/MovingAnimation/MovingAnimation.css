@@ -1,15 +1,22 @@
 .animation{
-    top: -5rem;
-    right: 17rem;
+    top: 4.5rem;
+    width: 32rem !important;
+    right: 2rem;
+    overflow: hidden;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
     animation-name: slideLeft;
-    transition: all 2s ease-out;
-    animation-duration: 2s;
+    transition: all 4s ease-out;
+    animation-duration: 4s;
 }
 
 @keyframes slideLeft {
     from{
         transform: translateX(600px);
+        opacity: 0;
     }to {
+        opacity: 1;
         transform: translateX(0);
     }
 }

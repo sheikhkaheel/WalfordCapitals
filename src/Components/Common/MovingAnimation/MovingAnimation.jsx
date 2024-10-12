@@ -40,7 +40,7 @@ const SimpleMarchingCubes = () => {
         scene.add(light);
 
         // Marching Cubes
-        effect = new MarchingCubes(resolution, new THREE.MeshStandardMaterial({ color: 0x9c0000 }), true, true, 100000);
+        effect = new MarchingCubes(resolution, new THREE.MeshStandardMaterial({ color: 0x0000ff }), true, true, 100000);
         effect.position.set(0, 0, 0);
         effect.scale.set(350, 350, 350);
         scene.add(effect);
@@ -61,30 +61,63 @@ const SimpleMarchingCubes = () => {
         renderer.setSize(window.innerWidth, window.innerHeight);
     };
 
+    const getColor = (time) => {
+        // Define blue shades
+        const blueVariants = [
+            new THREE.Color(0x0000ff), // Blue
+            new THREE.Color(0x3399ff), // Light Blue
+            new THREE.Color(0x66ccff), // Medium Light Blue
+            new THREE.Color(0x0099cc), // Medium Blue
+            new THREE.Color(0x003366), // Dark Blue
+        ];
+
+        // Determine the current and next index for interpolation
+        const index = Math.floor((time * 0.1) % blueVariants.length);
+        const nextIndex = (index + 1) % blueVariants.length;
+
+        // Get the current and next colors
+        const currentColor = blueVariants[index];
+        const nextColor = blueVariants[nextIndex];
+
+        // Calculate the interpolation factor
+        const alpha = (time * 0.1) % 1; // Fractional part for smooth transition
+
+        // Interpolate between current and next color
+        const color = currentColor.clone().lerp(nextColor, alpha);
+        return color;
+    };
+
     const updateCubes = () => {
         effect.reset();
         const numBlobs = 10;
         const strength = 1.2;
 
         for (let i = 0; i < numBlobs; i++) {
-            const ballx = Math.sin(i + 1.26 * time) * 0.27 + 0.5;
-            const bally = Math.abs(Math.cos(i + 1.12 * time)) * 0.77;
-            const ballz = Math.cos(i + 1.32 * time * 0.1) * 0.27 + 0.5;
-            effect.addBall(ballx, bally, ballz, strength, 12);
+            // Reduce the multipliers in the position calculations for slower movement
+            const ballx = Math.sin(i + 0.5 * time) * 0.27 + 0.5; // Slower x movement
+            const bally = Math.abs(Math.cos(i + 0.5 * time)) * 0.77; // Slower y movement
+            const ballz = Math.cos(i + 0.5 * time * 0.1) * 0.27 + 0.5; // Slower z movement
+
+            // Get color that changes smoothly to blue variants
+            const color = getColor(time);
+            effect.addBall(ballx, bally, ballz, strength, 12); // Add ball without material
+
+            // Update color of the marching cubes effect based on time
+            effect.material.color.set(color);
         }
 
         effect.update();
     };
 
     const animate = () => {
-        time += clock.getDelta() * 0.5;
+        time += clock.getDelta(); // Increment time
         updateCubes();
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
     };
 
     return (
-        <div ref={containerRef} className="w-[80%] h-[83vh] relative animation" /> // Set width to 80% and height to 70% of viewport height
+        <div ref={containerRef} className="h-[87vh] absolute animation" />
     );
 };
 
