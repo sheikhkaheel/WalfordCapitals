@@ -6,7 +6,7 @@ import './MovingAnimation.css';
 
 const SimpleMarchingCubes = () => {
     const containerRef = useRef(null);
-    let camera, scene, renderer, effect;
+    let camera, scene, renderer, effect, controls;
     let time = 0;
     const clock = new THREE.Clock();
     const resolution = 28;
@@ -52,37 +52,49 @@ const SimpleMarchingCubes = () => {
         container.appendChild(renderer.domElement);
 
         // Controls
-        new OrbitControls(camera, renderer.domElement);
+        controls = new OrbitControls(camera, renderer.domElement);
+        updateControls();
+    };
+
+    const updateControls = () => {
+        const isMobile = window.innerWidth < 700;
+        controls.enableRotate = !isMobile; // Disable rotation on mobile
+        controls.enablePan = !isMobile; // Disable panning on mobile
+        controls.enableZoom = !isMobile; // Disable zoom on mobile
+
+        // Adjust scale for mobile
+        if (isMobile) {
+            controls.dispose(); // Dispose of controls to prevent interference
+            effect.scale.set(200, 200, 200); // Set smaller scale for mobile
+        } else {
+            effect.scale.set(350, 350, 350); // Reset scale for larger screens
+        }
     };
 
     const onWindowResize = () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
+        updateControls(); // Update controls and scale on resize
     };
 
     const getColor = (time) => {
-        // Define blue shades
         const blueVariants = [
-            new THREE.Color(0x0000ff), // Blue
-            new THREE.Color(0x3399ff), // Light Blue
-            new THREE.Color(0x66ccff), // Medium Light Blue
-            new THREE.Color(0x0099cc), // Medium Blue
-            new THREE.Color(0x003366), // Dark Blue
+            new THREE.Color(0x0000ff),
+            new THREE.Color(0x3399ff),
+            new THREE.Color(0x66ccff),
+            new THREE.Color(0x0099cc),
+            new THREE.Color(0x003366),
         ];
 
-        // Determine the current and next index for interpolation
         const index = Math.floor((time * 0.1) % blueVariants.length);
         const nextIndex = (index + 1) % blueVariants.length;
 
-        // Get the current and next colors
         const currentColor = blueVariants[index];
         const nextColor = blueVariants[nextIndex];
 
-        // Calculate the interpolation factor
-        const alpha = (time * 0.1) % 1; // Fractional part for smooth transition
+        const alpha = (time * 0.1) % 1;
 
-        // Interpolate between current and next color
         const color = currentColor.clone().lerp(nextColor, alpha);
         return color;
     };
@@ -93,16 +105,12 @@ const SimpleMarchingCubes = () => {
         const strength = 1.2;
 
         for (let i = 0; i < numBlobs; i++) {
-            // Reduce the multipliers in the position calculations for slower movement
-            const ballx = Math.sin(i + 0.5 * time) * 0.27 + 0.5; // Slower x movement
-            const bally = Math.abs(Math.cos(i + 0.5 * time)) * 0.77; // Slower y movement
-            const ballz = Math.cos(i + 0.5 * time * 0.1) * 0.27 + 0.5; // Slower z movement
+            const ballx = Math.sin(i + 0.5 * time) * 0.27 + 0.5;
+            const bally = Math.abs(Math.cos(i + 0.5 * time)) * 0.77;
+            const ballz = Math.cos(i + 0.5 * time * 0.1) * 0.27 + 0.5;
 
-            // Get color that changes smoothly to blue variants
             const color = getColor(time);
-            effect.addBall(ballx, bally, ballz, strength, 12); // Add ball without material
-
-            // Update color of the marching cubes effect based on time
+            effect.addBall(ballx, bally, ballz, strength, 12);
             effect.material.color.set(color);
         }
 
@@ -111,13 +119,17 @@ const SimpleMarchingCubes = () => {
 
     const animate = () => {
         time += clock.getDelta(); // Increment time
+
+        // Rotate the effect slowly around the y-axis
+        effect.rotation.y += 0.01; // Adjust this value for faster or slower rotation
+
         updateCubes();
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
     };
 
     return (
-        <div ref={containerRef} className="h-[87vh] absolute animation" />
+        <div ref={containerRef} />
     );
 };
 

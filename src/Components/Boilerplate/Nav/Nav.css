@@ -22,3 +22,46 @@ body,
         transform: translateY(0);
     }
 }
+
+.links {
+    position: relative; /* Ensure positioning context for pseudo-elements */
+}
+
+.links a {
+    position: relative; 
+    display: inline-block; 
+    overflow: hidden; 
+    color: white; 
+    text-decoration: none; 
+}
+
+.links a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px; 
+    background-color: white; 
+    transform: translateX(-100%); 
+    transition: transform 0.3s ease; 
+    opacity: 0; 
+}
+
+.links a:hover::after {
+    transform: translateX(0); 
+    opacity: 1; 
+}
+
+.links a.active {
+    border: 3px solid white;
+    border-top: 1px;
+    border-left: 1px;
+    border-right: 1px;
+    pointer-events: none; 
+}
+
+.links a.active::after {
+    display: none; 
+}
+
