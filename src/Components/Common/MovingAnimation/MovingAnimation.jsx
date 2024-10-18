@@ -42,40 +42,40 @@ const SimpleMarchingCubes = () => {
         // Marching Cubes
         effect = new MarchingCubes(resolution, new THREE.MeshStandardMaterial({ color: 0x0000ff }), true, true, 100000);
         effect.position.set(0, 0, 0);
-        effect.scale.set(350, 350, 350);
+        effect.scale.set(400, 400, 400); // Increased scale for larger effect
         scene.add(effect);
 
         // Renderer
         renderer = new THREE.WebGLRenderer({ alpha: true });
         renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(window.innerWidth / 1.65, window.innerHeight); // 50% of the width
         container.appendChild(renderer.domElement);
 
         // Controls
         controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableRotate = true; 
+        controls.enablePan = true; 
+        controls.enableZoom = false; 
         updateControls();
     };
 
     const updateControls = () => {
         const isMobile = window.innerWidth < 700;
-        controls.enableRotate = !isMobile; // Disable rotation on mobile
-        controls.enablePan = !isMobile; // Disable panning on mobile
-        controls.enableZoom = !isMobile; // Disable zoom on mobile
+        controls.enableRotate = !isMobile; 
+        controls.enablePan = !isMobile;
 
-        // Adjust scale for mobile
         if (isMobile) {
-            controls.dispose(); // Dispose of controls to prevent interference
-            effect.scale.set(200, 200, 200); // Set smaller scale for mobile
+            effect.scale.set(250, 250, 250); // Adjust for mobile
         } else {
-            effect.scale.set(350, 350, 350); // Reset scale for larger screens
+            effect.scale.set(400, 400, 400); // Increased scale for larger effect
         }
     };
 
     const onWindowResize = () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        updateControls(); // Update controls and scale on resize
+        renderer.setSize(window.innerWidth/ 1.65 , window.innerHeight);
+        updateControls(); 
     };
 
     const getColor = (time) => {
@@ -118,10 +118,9 @@ const SimpleMarchingCubes = () => {
     };
 
     const animate = () => {
-        time += clock.getDelta(); // Increment time
+        time += clock.getDelta(); 
 
-        // Rotate the effect slowly around the y-axis
-        effect.rotation.y += 0.01; // Adjust this value for faster or slower rotation
+        effect.rotation.y += 0.01; 
 
         updateCubes();
         renderer.render(scene, camera);
@@ -129,7 +128,10 @@ const SimpleMarchingCubes = () => {
     };
 
     return (
-        <div ref={containerRef} />
+        <div
+            ref={containerRef}
+            className='flex justify-center mt-8 lg:mt-1 h-[43vh] lg:h-[83vh] lg:relative lg:top-0 items-center' // Increased height
+        />
     );
 };
 

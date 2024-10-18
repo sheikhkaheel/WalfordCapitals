@@ -7,8 +7,8 @@ body,
 
 .slideDown {
     animation-name: SlideDown;
-    animation-duration: 2s;
-    transition: all 2s ease-in;
+    animation-duration: 4s;
+    transition: all 4s ease-in;
 }
 
 @keyframes SlideDown {
@@ -41,7 +41,7 @@ body,
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 2px; 
+    height: 1px; 
     background-color: white; 
     transform: translateX(-100%); 
     transition: transform 0.3s ease; 
@@ -54,7 +54,7 @@ body,
 }
 
 .links a.active {
-    border: 3px solid white;
+    border: 1px solid white;
     border-top: 1px;
     border-left: 1px;
     border-right: 1px;

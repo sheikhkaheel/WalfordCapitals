@@ -1,21 +1,21 @@
 .animation{
-    overflow: hidden;
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
     animation-name: slideLeft;
-    transition: all 4s ease-out;
-    animation-duration: 4s;
+    animation-duration: 3s;
+    transition: all 3s ease;
 }
-
-
 
 @keyframes slideLeft {
     from{
         transform: translateX(600px);
         opacity: 0;
-    }to {
-        opacity: 1;
+    } to{
         transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width:600px){
+    .animation{
+        animation: none;
     }
 }
